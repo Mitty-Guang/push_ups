@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% raw %}
+<div id="date">
+    <div class="title">打卡日历</div>
+    <div class="date-time">
+        <div class="date-year">{{year}}年{{month}}月</div>
+        <div>
+            <ul>
+                <li class="date">日</li>
+                <li class="date">一</li>
+                <li class="date">二</li>
+                <li class="date">三</li>
+                <li class="date">四</li>
+                <li class="date">五</li>
+                <li class="date">六</li>
+            </ul>
+        </div>
+        <div>
+            <ul class="do1">
+                <li  style="text-align:right" v-if="index==0" class="day" :style="{width:scrollerHeight}" v-for="(i,index) in dates">
+                    <div v-if="i==1" style="color:red" v-on:click="get(index)">{{index+1}}</div>
+                     <div v-if="i==0">{{index+1}}</div>
+                </li>
+                <li   v-if="index!=0" class="day"  v-for="(i,index) in dates">
+                    <div v-if="i==1" style="color:red" v-on:click="get(index)">{{index+1}}</div>
+                    <div v-if="i==0">{{index+1}}</div>
+                </li>
+
+
+
+            </ul>
+        </div>
+    </div>
+    <div class="tips">tips:点击日期查看打卡明细</div>
+    <div v-if="date!=''" class="tips1">
+        <div>打卡时间{{date}}</div>
+        <div>今日共完成{{TotalNumber}}个</div>
+        <div>完成俯卧撑训练{{ExerciseNumber}}个</div>
+        <div v-for="(i) in CompeteNumber">完成一分钟俯卧撑{{i}}个</div>
+    </div>
+</div>
+{% endraw %}
+</body>
+<script src="../static/js/vue.js"></script>
+<script src="../static/js/axios-0.18.0.js"></script>
+<script>
+    new Vue({
+        el:"#date",
+        data(){
+            return{
+                year: 2022,
+                month: 5,
+                dayone:0,
+                dates:[],
+                count:0,
+                mystyle:"100px",
+                mystyle1:"0px",
+                date:"",
+                TotalNumber: 0,
+                ExerciseNumber: 0,
+                CompeteNumber: [],
+            }
+        },
+        computed: {
+
+         scrollerHeight: function() {
+            return this.dayone*90 + 'px';
+            }
+        },
+
+        methods:{
+            get(index){
+                var _this=this;
+                axios.post('/record/getRecordMessages',{day:index+1
+                }).then(function (res){
+                    _this.date=res.data.data.date;
+                    _this.TotalNumber=res.data.data.TotalNumber;
+                    _this.ExerciseNumber=res.data.data.ExerciseNumber;
+                    _this.CompeteNumber=res.data.data.CompeteNumber;
+                })
+            }
+        },
+        mounted(){
+            let nowDate = new Date();
+            this.year=nowDate.getFullYear();
+            this.month=nowDate.getMonth() + 1;
+            day=nowDate.getDay();
+            day1=nowDate.getDate()
+            console.log(day)
+            console.log(day1)
+            this.dayone=day-(day1%7)+1;
+            if(this.dayone<=0){
+                this.dayone=this.dayone+7;
+            }
+            var _this=this;
+            axios.post('/record/getRecordDays',{
+            }).then(function (res){
+                console.log(res)
+                _this.dates=res.data.data
+                console.log(_this.dates)
+                var count=Math.trunc(_this.dates.length/7)+1;
+                var left=_this.dates.length%7;
+                if(_this.dayone+left>7){
+                    count++;
+                }
+                _this.count=count;
+                console.log(_this.count)
+            })
+
+        }
+    })
+</script>
+<style>
+    .tips1{
+        margin-top:10%;
+        font-size:40px;
+        margin-left:20%;
+    }
+    .tips{
+        margin-top:10%;
+        font-size:40px;
+        margin-left:25%;
+    }
+    ul{
+        display: flex;
+        font-size: 30px;
+        flex-wrap: wrap;
+    }
+    .do1{
+        margin-left: 70px;
+    }
+    .date{
+        margin-left: 70px;
+    }
+    .day{
+        width:90px;
+        height:90px;
+        margin-left:0px
+        text-align:center;
+        margin-right:8px;
+    }
+    .day1{
+        width:90px;
+        height:90px;
+        margin-left:0px
+        text-align:center;
+        margin-right:8px;
+        color:red;
+    }
+    .date-time{
+        height: 800px;
+        width: 800px;
+        background: skyblue;
+        margin-left: 100px;
+        margin-top: 10%;
+    }
+    .date-year{
+        width: 800px;
+        height: 50px;
+        font-size: 40px;
+        text-align: center;
+    }
+    a{
+        text-decoration: none;
+        color: black;
+    }
+    ul li{
+        list-style-type: none;
+    }
+    input{
+        outline: none;
+    }
+    .title{
+        font-size: 60px;
+        margin-left: 40%;
+        margin-top: 20%;
+    }
+</style>
+</html>

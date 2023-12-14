@@ -1,0 +1,11 @@
+alembic==1.12.1
+Flask==2.2.2
+Flask_Migrate==4.0.0
+Flask_SQLAlchemy==2.5.1
+mediapipe==0.8.11
+numpy==1.23.1
+opencv_python==4.6.0.66
+Pillow==9.4.0
+SQLAlchemy==1.4.40
+Werkzeug==2.2.2
+WTForms==3.0.1

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% raw %}
+  <div id="ranking">
+    <div class="title">班级排行榜</div>
+    <div class="title-two">
+      总打卡个数排行榜
+    </div>
+    <div class="person">
+      <div>
+          {% endraw %}
+        <img src="{{ g.user.head }}">
+          {% raw %}
+      </div>
+      <div class="name">
+        <div>第{{ranking}}名</div>
+        <div>{{user.username}}</div>
+      </div>
+      <div class="count">
+        累计打卡{{user.TotalNumber}}个
+      </div>
+    </div>
+    <div style="margin-top:10%">
+    <div v-for='(person1,index) in users' class="person">
+      <div>
+        <img :src=person1.head>
+      </div>
+      <div class="name">
+        <div>第{{index+1}}名</div>
+        <div>{{person1.username}}</div>
+      </div>
+      <div class="count">
+        累计打卡{{person1.TotalNumber}}个
+      </div>
+    </div>
+    </div>
+  </div>
+{% endraw %}
+</body>
+<script src="../static/js/vue.js"></script>
+<script src="../static/js/axios-0.18.0.js"></script>
+<script>
+  new Vue({
+    el:"#ranking",
+    data(){
+      return{
+          user:{},
+          users:[],
+          ranking:0,
+      }
+    },
+    methods:{
+    },
+    mounted(){
+      var _this=this;
+      axios.post('/user/rankings',{
+      }).then(function (res){
+        console.log(res)
+        if(res.data.code==201){
+          alert("尚未登录")
+        }
+        else if(res.data.code==200){
+          _this.user=res.data.data.users[0];
+          _this.users=res.data.data.users.slice(1,11);
+          _this.ranking=res.data.data.ranking;
+          console.log(_this.users)
+        }
+      })
+    }
+  })
+</script>
+<style>
+  a{
+    text-decoration: none;
+    color: black;
+  }
+  .title{
+    font-size: 60px;
+    margin-left: 30%;
+    margin-top: 10%;
+  }
+  .title-two{
+    font-size: 40px;
+    margin-left: 10%;
+    height: 50px;
+    width: 800px;
+    background: skyblue;
+    margin-top: 5%;
+  }
+  .person{
+    display: flex;
+    height: 100px;
+    width: 800px;
+    background: skyblue;
+    margin-left: 10%;
+  }
+  img{
+    height: 100px;
+    width: 100px;
+    border-radius: 50px;
+  }
+  .name{
+    width:100px;
+    text-align: center;
+    height: 100px;
+    font-size: 30px;
+    margin-left: 30px;
+  }
+  .count{
+    text-align: center;
+    font-size: 40px;
+    height: 100px;
+    margin-left: 200px;
+    margin-top: 20px;
+  }
+</style>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div>
+      <img src="{{ url_for("punch.video_detection") }}" width="100%" height="1300px">
+    </div>
+    <div id="exercise">
+    <div class="choose">
+
+  <input style="margin-left:20%" id="start" type="button" value="开始" v-on:click="start1">
+  <input id="stop" type="button" value="停止" class="end" v-on:click="end1">
+    </div>
+    </div>
+</body>
+<script src="../static/js/vue.js"></script>
+<script src="../static/js/axios-0.18.0.js"></script>
+<script>
+  new Vue({
+        el:"#exercise",
+        data(){
+            return{
+                number:""
+            }
+        },
+        methods:{
+            start1(){
+              axios.get('/record/start',{
+              }).then(function (res){
+              })
+            },
+            end1(){
+              axios.get('/record/stop',{
+              }).then(function (res){
+                    this.number=res.data.data
+                    axios.post('/record/exercise',{
+                       Number:this.number
+                    }).then(function (res) {
+                   if(res.data.message=="打卡成功！"&&res.data.code==200)
+                       alert("打卡成功！")
+                   else
+                        alert("打卡失败！")
+                   location.href="{{url_for("user.exercise_index") }}"
+                        })
+              })
+            }
+        },
+
+        mounted(){
+
+        }
+    })
+</script>
+<style>
+  .choose{
+    margin-left: 15%;
+    margin-top: 10%;
+  }
+  input{
+    height: 70px;
+    width: 150px;
+    font-size: 40px;
+  }
+  .stop{
+    margin-left: 12%;
+  }
+  .end{
+    margin-left: 12%;
+  }
+  .res{
+    margin-top: 10%;
+    font-size: 40px;
+    text-align: center;
+  }
+
+</style>
+</html>
