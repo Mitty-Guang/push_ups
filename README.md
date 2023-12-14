@@ -1,5 +1,11 @@
 # push_ups
  俯卧撑计数，好友排名小程序
+
+[![1.png](https://i.postimg.cc/DZhgV85y/1.png)](https://postimg.cc/t1rPWRLL)
+[![2.png](https://i.postimg.cc/141RM1sT/2.png)](https://postimg.cc/2LTf8JqF)
+[![3.png](https://i.postimg.cc/523Lrbj8/3.png)](https://postimg.cc/gxxxX9V0)
+[![4.png](https://i.postimg.cc/7h856Wfx/4.png)](https://postimg.cc/dk6sNn2X)
+ 
 **项目功能**
 
 该项目为广大使用者提供了一个俯卧撑训练打卡平台，该平台可以用于俯卧撑教学监督、日常练习等场景中，我们希望使用者可以在该平台的帮助下，规范、长期、有效地进行俯卧撑训练。
